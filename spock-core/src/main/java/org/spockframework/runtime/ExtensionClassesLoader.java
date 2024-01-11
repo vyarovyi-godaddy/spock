@@ -37,9 +37,10 @@ public class ExtensionClassesLoader {
     for (URL url : locateDescriptors(descriptorPath)) {
       for (String className : readDescriptor(url)) {
         if (discoveredClasses.containsKey(className)) {
-          throw new ExtensionException("Duplicated Extension declaration for [%s]\nSource 1: %s\nSource 2: %s\n" +
-            "This is most likely caused by having two different version of a library on the classpath."
-          ).withArgs(className, url, discoveredClasses.get(className));
+          continue;
+//          throw new ExtensionException("Duplicated Extension declaration for [%s]\nSource 1: %s\nSource 2: %s\n" +
+//            "This is most likely caused by having two different version of a library on the classpath."
+//          ).withArgs(className, url, discoveredClasses.get(className));
         }
         discoveredClasses.put(className, url);
         extClasses.add(loadExtensionClass(className));

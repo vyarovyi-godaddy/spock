@@ -51,6 +51,11 @@ public class SpockReleaseInfo {
   }
 
   public static boolean isCompatibleGroovyVersion(VersionNumber groovyVersion) {
+    System.out.printf("minGroovyVersion: " + minGroovyVersion);
+    System.out.printf("maxGroovyVersion: " + minGroovyVersion);
+    System.out.printf("groovyVersion.equals(VersionNumber.UNKNOWN)):" + groovyVersion.equals(VersionNumber.UNKNOWN));
+    System.out.printf("min<=0&&max>=0:" + (minGroovyVersion.compareTo(groovyVersion) <= 0
+      && maxGroovyVersion.compareTo(groovyVersion) >= 0));
     if (
         // happens when running tests from IDE as the latter doesn't have processed properties file
         minGroovyVersion.equals(VersionNumber.UNKNOWN) ||
