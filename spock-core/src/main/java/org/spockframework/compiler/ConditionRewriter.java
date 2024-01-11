@@ -719,4 +719,30 @@ public class ConditionRewriter extends AbstractExpressionConverter<Expression> {
     result.setSourcePosition(condition);
     return result;
   }
+
+
+  @Override
+  public void visitLambdaExpression(LambdaExpression expr) {
+    visitClosureExpression(expr);
+  }
+
+  @Override
+  public void visitMethodReferenceExpression(MethodReferenceExpression expr) {
+    visitMethodPointerExpression(expr);
+  }
+
+  @Override
+  public void visitEmptyStatement(EmptyStatement statement) {
+    super.visitEmptyStatement(statement);
+  }
+
+  @Override
+  public void visitEmptyExpression(EmptyExpression expression) {
+    super.visitEmptyExpression(expression);
+  }
+
+  @Override
+  public void visitListOfExpressions(List<? extends Expression> list) {
+    super.visitListOfExpressions(list);
+  }
 }

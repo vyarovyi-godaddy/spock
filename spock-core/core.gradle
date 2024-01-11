@@ -1,4 +1,4 @@
-apply plugin: 'osgi'
+//apply plugin: 'osgi'
 apply from: script("publishMaven")
 
 ext.displayName = "Spock Framework - Core Module"
@@ -11,30 +11,25 @@ Spock is inspired from JUnit, jMock, RSpec, Groovy, Scala, Vulcans, and other fa
 configurations { coreConsoleRuntime }
 
 dependencies {
-  compile libs.groovy // easiest way to add Groovy dependency to POM
-  compile libs.junit
+  implementation libs.groovy // easiest way to add Groovy dependency to POM
+  implementation libs.junit
 
-  compile libs.jetbrainsAnnotations, optional
-  compile libs.ant, optional
-  compile libs.asm, optional
-  compile libs.bytebuddy, optional
-  compile libs.cglib, optional
-  compile libs.objenesis, optional
-  if (variant == 2.4) {
-    compileOnly project(':internal-backport')
-  }
+  implementation libs.jetbrainsAnnotations, optional
+  implementation libs.ant, optional
+  implementation libs.asm, optional
+  implementation libs.bytebuddy, optional
+  implementation libs.cglib, optional
+  implementation libs.objenesis, optional
+//  if (variant == 2.4) {
+//    compileOnly project(':internal-backport')
+//  }
 
   coreConsoleRuntime groovyConsoleExtraDependency
 }
 
-
-jar {
+tasks.named("jar", Jar) {
   manifest {
-    name = 'spock-core'
     attributes(
-      'Created-By': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString(),
-      'Build-Date': buildDate,
-      'Build-Time': buildTime,
       'Build-Revision': versioning.info.commit,
       'Specification-Title': project.name,
       'Specification-Version': baseVersion,
@@ -44,21 +39,62 @@ jar {
       'Implementation-Vendor': 'spockframework.org',
       'Automatic-Module-Name': 'org.spockframework.core'
     )
-    instruction 'Export-Package', 'org.spockframework.*', 'spock.*'
-    instruction 'Embed-Dependency', 'groovy;inline=false', 'junit;inline=false'
-    instruction 'Import-Package',
-        'groovy.*;version="[2.4,4)"',
-        'org.codehaus.groovy.*;version="[2.4,4)"',
-        'org.junit.*;version="[4,6)"',
-        'org.hamcrest.*;version="[1,2)";resolution:=optional',
-        'org.objenesis.*;version="[2,3)";resolution:=optional',
-        'org.apache.tools.ant.*;version="[1.7,2)";resolution:=optional',
-        'net.bytebuddy.*;version="[1.9,2)";resolution:=optional',
-        'net.sf.cglib.*;version="[3.2,4)";resolution:=optional',
-        'org.objectweb.asm.*;version="[5.2,6)";resolution:=optional',
-        'org.w3c.dom.*'
   }
+//  bundle {
+//    bnd(
+//      'Export-Package': ['org.spockframework.*', 'spock.*'].join(','),
+//      'Import-Package': [
+//        'org.junit.platform.testkit.*;resolution:=optional',
+//        'org.hamcrest.*;resolution:=optional',
+//        'org.objenesis.*;resolution:=optional',
+//        'net.bytebuddy.*;resolution:=optional',
+//        'net.sf.cglib.*;resolution:=optional',
+//        'org.objectweb.asm.*;resolution:=optional',
+//        'org.mockito.*;resolution:=optional',
+//        '*'
+//      ].join(','),
+//      '-noclassforname': 'true',
+//      '-noextraheaders': 'true',
+//      '-removeheaders': 'Private-Package',
+//      /*
+//       * Ensure the bundle can be built in a reproducible manner, This shall prevent build cache misses, when different variants are tested.
+//       * https://bnd.bndtools.org/instructions/reproducible.html
+//       */
+//      '-reproducible': 'true',
+//    )
+//  }
 }
+//jar {
+//  manifest {
+////    name = 'spock-core'
+//    attributes(
+//      'Created-By': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString(),
+//      'Build-Date': buildDate,
+//      'Build-Time': buildTime,
+//      'Build-Revision': versioning.info.commit,
+//      'Specification-Title': project.name,
+//      'Specification-Version': baseVersion,
+//      'Specification-Vendor': 'spockframework.org',
+//      'Implementation-Title': project.name,
+//      'Implementation-Version': variantLessVersion,
+//      'Implementation-Vendor': 'spockframework.org',
+//      'Automatic-Module-Name': 'org.spockframework.core'
+//    )
+//    instruction 'Export-Package', 'org.spockframework.*', 'spock.*'
+//    instruction 'Embed-Dependency', 'groovy;inline=false', 'junit;inline=false'
+//    instruction 'Import-Package',
+//        'groovy.*;version="[2.4,4)"',
+//        'org.codehaus.groovy.*;version="[2.4,4)"',
+//        'org.junit.*;version="[4,6)"',
+//        'org.hamcrest.*;version="[1,2)";resolution:=optional',
+//        'org.objenesis.*;version="[2,3)";resolution:=optional',
+//        'org.apache.tools.ant.*;version="[1.7,2)";resolution:=optional',
+//        'net.bytebuddy.*;version="[1.9,2)";resolution:=optional',
+//        'net.sf.cglib.*;version="[3.2,4)";resolution:=optional',
+//        'org.objectweb.asm.*;version="[5.2,6)";resolution:=optional',
+//        'org.w3c.dom.*'
+//  }
+//}
 
 processResources {
   def tokens = [version: version.toString(), minGroovyVersion: minGroovyVersion, maxGroovyVersion: maxGroovyVersion]

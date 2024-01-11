@@ -16,6 +16,7 @@
 
 package org.spockframework.runtime;
 
+import org.codehaus.groovy.ast.stmt.EmptyStatement;
 import org.spockframework.runtime.model.*;
 import org.spockframework.util.AbstractExpressionConverter;
 
@@ -398,5 +399,31 @@ public class ExpressionInfoConverter extends AbstractExpressionConverter<Express
     }
 
     throw new IllegalArgumentException(String.format("token %s not found in expression", token));
+  }
+
+
+  @Override
+  public void visitLambdaExpression(LambdaExpression expr) {
+    visitClosureExpression(expr);
+  }
+
+  @Override
+  public void visitMethodReferenceExpression(MethodReferenceExpression expr) {
+    visitMethodPointerExpression(expr);
+  }
+
+  @Override
+  public void visitEmptyStatement(EmptyStatement statement) {
+    super.visitEmptyStatement(statement);
+  }
+
+  @Override
+  public void visitEmptyExpression(EmptyExpression expression) {
+    super.visitEmptyExpression(expression);
+  }
+
+  @Override
+  public void visitListOfExpressions(List<? extends Expression> list) {
+    super.visitListOfExpressions(list);
   }
 }
